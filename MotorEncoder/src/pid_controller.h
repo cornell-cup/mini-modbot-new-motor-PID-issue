@@ -12,6 +12,7 @@ typedef struct{
 	float Kp;
 	float Ki;
 	float Kd;
+	float dt;
 	int accumulator;
 }pid_t;
 
