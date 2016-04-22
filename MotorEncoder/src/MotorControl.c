@@ -9,53 +9,42 @@
 
 #include "motor_drive.h"
 #include "motor_encoder.h"
-#include <signal.h>
-/*
- */
-volatile sig_atomic_t RUNNING = 1;
-void keyboardinterrupt(int sig){
-	RUNNING = 0;
-}
+#include "pid_controller.h"
+
 int main()
 {
-	signal(SIGTERM, keyboardinterrupt);
 
 	TARGET_SPEED_L = 100;
 
-	float RPM;
-	float usec;
 	float duty = 0.06;
-	float prev_duty;
 	float PID;
 	motorLeft_direction(MOTOR_CW);
 	motorLeft_drive(duty);
-	motorRight_direction(MOTOR_CW);
-	motorRight_drive(duty);
+//	motorRight_direction(MOTOR_CW);
+//	motorRight_drive(duty);
 	sleep(1);
 	initEncoder();
-	int i=0;
 
 	//prev_duty, if PID is negative, subtract 5% off duty
 
-	while(RUNNING){
-		usleep(20000);
-		PID = motorLeft_PID();
-		duty = PID/1000.0;
-		if(duty <=0) duty =0.01;
-		if(duty >0.95) duty =0.95;
-		motorLeft_drive(duty);
-		motorRight_drive(duty);
+	motor_pid_t leftmotor;
+	leftmotor.Kp = PTerm;
+	leftmotor.Ki = ITerm;
+	leftmotor.Kd = DTerm;
+	leftmotor.accumulator = 0;
+	leftmotor.dt = 1;
+	leftmotor.error = 0;
 
-		if(++i ==1) {
-			RPM = getRPM_L();
-			usec = getusecPerCount_L();
-			fprintf(stdout, "PID: %.1f   RPM: %.1f   duty: %.3f   usec: %.1f\n", (float)PID, (float)RPM, duty, usec);
-			i=0;
-		}
+	while(1){
+		usleep(10000);
+		PID = motor_pid(&leftmotor, TARGET_SPEED_L, getRPM_L());
+		duty = duty + PID/1000.0;
+		if(duty <= 0) duty = 0.0;
+		if(duty > 0.95) duty = 0.95;
+		motorLeft_drive(duty);
 	}
 
 	motorLeft_brake();
-	motorRight_brake();
 
 	return MRAA_SUCCESS;
 }

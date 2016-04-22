@@ -1,10 +1,10 @@
 
 #include "pid_controller.h"
 
-float motor_pid(pid_t* pid, int target_speed, int motor_speed){
+float motor_pid(motor_pid_t* pid, int target_speed, int motor_speed){
 	float preverror = pid->error;
 	pid->error = target_speed - motor_speed;
-	pid->accumulator += error;
+	pid->accumulator += pid->error;
 
 	// check for zero crossing
 	if ((pid->error > 0 && preverror < 0) || (pid->error < 0 && preverror > 0))

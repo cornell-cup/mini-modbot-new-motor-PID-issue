@@ -28,7 +28,4 @@ int motorRight_drive(float duty);
 int motorRight_direction(int direction);
 int motorRight_brake(void);
 
-float motorLeft_PID(void);
-float motorRight_PID(void);
-
 #endif /* MOTOR_DRIVE_H_ */

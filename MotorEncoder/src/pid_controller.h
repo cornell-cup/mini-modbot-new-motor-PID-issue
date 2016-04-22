@@ -13,10 +13,13 @@ typedef struct{
 	float Ki;
 	float Kd;
 	float dt;
-	int accumulator;
-}pid_t;
+	float accumulator;
+	float error;
+}motor_pid_t;
 
 #define PID_MAX		1000
 #define PID_MIN		(-PID_MAX)
+
+float motor_pid(motor_pid_t* pid, int target_speed, int motor_speed);
 
 #endif /* PID_CONTROLLER_H_ */

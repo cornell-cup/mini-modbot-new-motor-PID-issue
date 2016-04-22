@@ -34,8 +34,8 @@ float usecPerCount_L;
 float usecPerCount_R;
 
 //PID terms
-#define PTerm  7.0
-#define ITerm  0.07
+#define PTerm  0.1
+#define ITerm  0.0
 #define DTerm  0.0
 
 #define IMUlog_file			"/home/imu.txt"
