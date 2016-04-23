@@ -28,13 +28,8 @@
 float TARGET_SPEED_L; //in RPM
 float TARGET_SPEED_R; //in RPM
 
-float RPM_L;
-float RPM_R;
-float usecPerCount_L;
-float usecPerCount_R;
-
 //PID terms
-#define PTerm  0.1
+#define PTerm  1.0
 #define ITerm  0.0
 #define DTerm  0.0
 

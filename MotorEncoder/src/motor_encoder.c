@@ -5,12 +5,11 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "motor_encoder.h"
+
 void ISR_PULSEIN_L();
 void ISR_PULSEIN_R();
 long absoluteTime(void);
-
-float CPR = 48.0;
-float gear_ratio = 20.4;
 
 
 /*
@@ -38,32 +37,15 @@ int initEncoder(void){
 	return 0;
 }
 
-/*
- * Return left RPM
- */
+struct timespec prevTime_L, currTime_L;
+volatile char loadISR = 0;
+
 float getRPM_L(void){
 	return RPM_L;
 }
 
-/*
- * Return right RPM
- */
 float getRPM_R(void){
 	return RPM_R;
-}
-
-/*
- * Return left milliseconds per count
- */
-float getusecPerCount_L(void){
-	return usecPerCount_L;
-}
-
-/*
- * Return right milliseconds per count
- */
-float getusecPerCount_R(void){
-	return usecPerCount_R;
 }
 
 /*
@@ -75,7 +57,7 @@ void ISR_PULSEIN_L(void* args){
 	prevTime = currTime;
 	currTime = absoluteTime();
 	usecPerCount_L = currTime - prevTime;
-	RPM_L = 1000000.0 * 60.0 * (4/usecPerCount_L)/(CPR * gear_ratio);
+	RPM_L = 1000000.0 * 60.0 * (4.0/usecPerCount_L)/(CPR * gear_ratio);
 }
 
 /*
@@ -87,7 +69,7 @@ void ISR_PULSEIN_R(void* args){
 	prevTime = currTime;
 	currTime = absoluteTime();
 	usecPerCount_R = currTime - prevTime;
-	RPM_R = 1000000.0 * 60.0 * (4/usecPerCount_R)/(CPR * gear_ratio);
+	RPM_R = 1000000.0 * 60.0 * (4.0/usecPerCount_R)/(CPR * gear_ratio);
 }
 
 /*

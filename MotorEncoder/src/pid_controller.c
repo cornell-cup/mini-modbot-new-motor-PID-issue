@@ -1,7 +1,7 @@
 
 #include "pid_controller.h"
 
-float motor_pid(motor_pid_t* pid, int target_speed, int motor_speed){
+float motor_pid(motor_pid_t* pid, float target_speed, float motor_speed){
 	float preverror = pid->error;
 	pid->error = target_speed - motor_speed;
 	pid->accumulator += pid->error;

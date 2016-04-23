@@ -20,6 +20,6 @@ typedef struct{
 #define PID_MAX		1000
 #define PID_MIN		(-PID_MAX)
 
-float motor_pid(motor_pid_t* pid, int target_speed, int motor_speed);
+float motor_pid(motor_pid_t* pid, float target_speed, float motor_speed);
 
 #endif /* PID_CONTROLLER_H_ */
